@@ -1,0 +1,6 @@
+package cphexercises
+
+opts = ""
+sourcedir = src
+modules = LectureOne
+          
