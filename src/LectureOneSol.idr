@@ -75,7 +75,14 @@ data Cmp : Nat -> Nat -> Type where
 -- construct very useful!
 --
 cmp : (n:Nat) -> (m:Nat) -> Cmp n m
-cmp = ?cmpBody
+cmp Z Z = cmpEQ
+cmp Z (S n) = cmpLT n
+cmp (S n) Z = cmpGT n
+cmp (S n) (S m) with (cmp n m)
+  cmp (S n) (S (n + S d)) | cmpLT d = cmpLT d
+  cmp (S n) (S n)         | cmpEQ = cmpEQ
+  cmp (S (m + S d)) (S m) | cmpGT d = cmpGT d
+
 
 -- --------------------------------------------------------------------- [ Q4b ]
 --

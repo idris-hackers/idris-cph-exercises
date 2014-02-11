@@ -17,7 +17,6 @@ module LectureTwo
 -- In L2-imp.idr you will ﬁnd a partially implemented imperative DSL.
 -- Implement the following missing functions:
 
-
 -- --------------------------------------------------------------------- [ Q9a ]
 -- update : HasType i G t -> Env G -> interpTy t -> Env G, which updates
 -- the value stored at a particular position in an environment.
@@ -36,21 +35,21 @@ module LectureTwo
 --
 -- One example program is the following:
 --
-
-small : Imp [] TyUnit
-small = Let (Val 42) (do Print (Var stop)
-                      stop := Op (+) (Var stop) (Val 1)
-                      Print (Var stop))
+-- 
+-- small : Imp [] TyUnit
+-- small = Let (Val 42) (do Print (Var stop)
+--                       stop := Op (+) (Var stop) (Val 1)
+--                       Print (Var stop))
 
 --
 -- Using dsl notation, and any other syntax overloading you ﬁnd useful,
 -- make it possible to write small as follows:
-
-small : Imp [] TyUnit
-small = imp (do let x = 42
-                Print x
-                x := x + 1
-                Print x)
+-- 
+-- small : Imp [] TyUnit
+-- small = imp (do let x = 42
+--                 Print x
+--                 x := x + 1
+--                 Print x)
 
 
 -- -------------------------------------------------------------- [ Question 11 ]
