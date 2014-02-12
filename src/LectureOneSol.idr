@@ -130,8 +130,12 @@ reverse xs = revAcc [] xs
 -- but you will need to think carefully about the type for revAcc, and
 -- may need to do some theorem proving.
 
-vreverse : Vect a n -> Vect a n
-vreverse = ?vreverseBody
+vreverse : Vect n a -> Vect n a
+vreverse xs = vrevAcc [] xs
+  where vrevAcc : Vect n a -> Vect m a -> Vect (n + m) a
+        vrevAcc acc [] = ?acc
+        vrevAcc acc (x :: xs) = ?vrecAcc_rec 
+
 
 -- ---------------------------------------------------------------------- [ Q7 ]
 --
@@ -143,24 +147,22 @@ data Tree a = Leaf | Node (Tree a) a (Tree a)
 -- which calculates whether a value is in the tree, and a
 -- corresponding proof.
 
-data ElemTree : a -> Tree a -> Type where
-  {} -- constructors
+using (x : a)
+  data ElemTree : a -> Tree a -> Type where
+    here : ElemTree x (Node left x right)
+    thereL : ElemTree x left -> ElemTree x (Node left y right)
+    thereR : ElemTree x right -> ElemTree x (Node left y right)
 
 elemInTree : DecEq a => (x : a) -> (t : Tree a) -> Maybe (ElemTree x t)
-elemInTree = ?elemInTreeBody
+elemInTree x Leaf = Nothing
+elemInTree x (Node left y right) = ?node_case
 
 -- --------------------------------------------------------------------- [ EOF ]
 
 ---------- Proofs ----------
 
-LectureOneSol.plus_assoc_step = proof
+LectureOneSol.plus_nSm_step = proof
   intros
-  rewrite ih
-  trivial
-
-LectureOneSol.plus_commutes_step = proof
-  intros
-  rewrite (plusSuccRightSucc m n)
   rewrite ih
   trivial
 
@@ -171,12 +173,28 @@ LectureOneSol.plus_commutes_base = proof
   trivial
 
 
-LectureOneSol.plus_nSm_step = proof
+LectureOneSol.plus_commutes_step = proof
+  intros
+  rewrite (plusSuccRightSucc m n)
+  rewrite ih
+  trivial
+
+
+LectureOneSol.plus_assoc_step = proof
   intros
   rewrite ih
   trivial
 
 
-  
+LectureOneSol.acc = proof
+  intros
+  rewrite sym (plusZeroRightNeutral n)
+  exact acc
+
+
+LectureOneSol.vrecAcc_rec = proof
+  intros
+  let res = acc ++ (x :: xs)
+  exact res
 
 
