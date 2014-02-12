@@ -153,9 +153,29 @@ using (x : a)
     thereL : ElemTree x left -> ElemTree x (Node left y right)
     thereR : ElemTree x right -> ElemTree x (Node left y right)
 
+oneOf : Maybe a -> Maybe a -> Maybe a
+oneOf Nothing m = m
+oneOf m       _ = m
+
 elemInTree : DecEq a => (x : a) -> (t : Tree a) -> Maybe (ElemTree x t)
 elemInTree x Leaf = Nothing
-elemInTree x (Node left y right) = ?node_case
+elemInTree x (Node left y right) with (decEq x y)
+  elemInTree x (Node left y right) | (Yes p) = ?isElem_rhs_1
+  elemInTree x (Node left y right) | (No _) =  
+     let m1 = elemInTree x left in
+     let m2 = elemInTree x right in
+     case m1 of
+       Nothing =>
+         case m2 of
+           Nothing => Nothing;
+           Just prf => Just (thereR prf);
+       Just prf => Just (thereL prf)
+                                 
+LectureOneSol.isElem_rhs_1 = proof
+  intros
+  rewrite p
+  exact Just here
+                                     
 
 -- --------------------------------------------------------------------- [ EOF ]
 
