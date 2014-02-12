@@ -95,14 +95,23 @@ cmp (S n) (S m) with (cmp n m)
 -- Implement the following functions:
 --
 plus_nSm : (n : Nat) -> (m : Nat) -> n + S m = S (n + m)
-plus_nSm = ?plus_nSmBody
+plus_nSm Z m = refl
+plus_nSm (S n) m =
+  let ih = plus_nSm n m in ?plus_nSm_step
+
 
 plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
-plus_commutes = ?plus_commutesBody
+plus_commutes Z m = ?plus_commutes_base
+plus_commutes (S n) m =
+  let ih = plus_commutes n m in ?plus_commutes_step
+
 
 plus_assoc : (n : Nat) -> (m : Nat) -> (p : Nat) ->
              n + (m + p) = (n + m) + p
-plus_assoc = ?plus_assocBody
+plus_assoc Z m p = refl
+plus_assoc (S n) m p =
+  let ih = plus_assoc n m p in ?plus_assoc_step
+
 
 -- ---------------------------------------------------------------------- [ Q6 ]
 --
@@ -141,3 +150,33 @@ elemInTree : DecEq a => (x : a) -> (t : Tree a) -> Maybe (ElemTree x t)
 elemInTree = ?elemInTreeBody
 
 -- --------------------------------------------------------------------- [ EOF ]
+
+---------- Proofs ----------
+
+LectureOneSol.plus_assoc_step = proof
+  intros
+  rewrite ih
+  trivial
+
+LectureOneSol.plus_commutes_step = proof
+  intros
+  rewrite (plusSuccRightSucc m n)
+  rewrite ih
+  trivial
+
+
+LectureOneSol.plus_commutes_base = proof
+  intros
+  rewrite sym (plusZeroRightNeutral m)
+  trivial
+
+
+LectureOneSol.plus_nSm_step = proof
+  intros
+  rewrite ih
+  trivial
+
+
+  
+
+
