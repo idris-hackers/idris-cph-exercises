@@ -83,7 +83,6 @@ cmp (S n) (S m) with (cmp n m)
   cmp (S n) (S n)         | cmpEQ = cmpEQ
   cmp (S (m + S d)) (S m) | cmpGT d = cmpGT d
 
-
 -- --------------------------------------------------------------------- [ Q4b ]
 --
 -- Assume you have a vector xs : Vect a n, where n is unknown. How
@@ -99,12 +98,26 @@ plus_nSm Z m = refl
 plus_nSm (S n) m =
   let ih = plus_nSm n m in ?plus_nSm_step
 
+LectureOneSol.plus_nSm_step = proof
+  intros
+  rewrite ih
+  trivial
 
 plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
 plus_commutes Z m = ?plus_commutes_base
 plus_commutes (S n) m =
   let ih = plus_commutes n m in ?plus_commutes_step
 
+LectureOneSol.plus_commutes_base = proof
+  intros
+  rewrite sym (plusZeroRightNeutral m)
+  trivial
+
+LectureOneSol.plus_commutes_step = proof
+  intros
+  rewrite (plusSuccRightSucc m n)
+  rewrite ih
+  trivial
 
 plus_assoc : (n : Nat) -> (m : Nat) -> (p : Nat) ->
              n + (m + p) = (n + m) + p
@@ -112,6 +125,10 @@ plus_assoc Z m p = refl
 plus_assoc (S n) m p =
   let ih = plus_assoc n m p in ?plus_assoc_step
 
+LectureOneSol.plus_assoc_step = proof
+  intros
+  rewrite ih
+  trivial
 
 -- ---------------------------------------------------------------------- [ Q6 ]
 --
@@ -136,6 +153,15 @@ vreverse xs = vrevAcc [] xs
         vrevAcc acc [] = ?acc
         vrevAcc acc (x :: xs) = ?vrecAcc_rec 
 
+LectureOneSol.acc = proof
+  intros
+  rewrite sym (plusZeroRightNeutral n)
+  exact acc
+
+LectureOneSol.vrecAcc_rec = proof
+  intros
+  let res = acc ++ (x :: xs)
+  exact res
 
 -- ---------------------------------------------------------------------- [ Q7 ]
 --
@@ -153,68 +179,22 @@ using (x : a)
     thereL : ElemTree x left -> ElemTree x (Node left y right)
     thereR : ElemTree x right -> ElemTree x (Node left y right)
 
-oneOf : Maybe a -> Maybe a -> Maybe a
-oneOf Nothing m = m
-oneOf m       _ = m
+  firstLeft : Maybe (ElemTree x left) -> Maybe (ElemTree x right) ->
+              Maybe (ElemTree x (Node left y right))
+  firstLeft Nothing Nothing = Nothing
+  firstLeft Nothing (Just prf) = Just (thereR prf)
+  firstLeft (Just prf) _ = Just (thereL prf)
 
 elemInTree : DecEq a => (x : a) -> (t : Tree a) -> Maybe (ElemTree x t)
 elemInTree x Leaf = Nothing
 elemInTree x (Node left y right) with (decEq x y)
   elemInTree x (Node left y right) | (Yes p) = ?isElem_rhs_1
-  elemInTree x (Node left y right) | (No _) =  
-     let m1 = elemInTree x left in
-     let m2 = elemInTree x right in
-     case m1 of
-       Nothing =>
-         case m2 of
-           Nothing => Nothing;
-           Just prf => Just (thereR prf);
-       Just prf => Just (thereL prf)
+  elemInTree x (Node left y right) | (No _) =
+    firstLeft (elemInTree x left) (elemInTree x right)
                                  
 LectureOneSol.isElem_rhs_1 = proof
   intros
   rewrite p
   exact Just here
                                      
-
 -- --------------------------------------------------------------------- [ EOF ]
-
----------- Proofs ----------
-
-LectureOneSol.plus_nSm_step = proof
-  intros
-  rewrite ih
-  trivial
-
-
-LectureOneSol.plus_commutes_base = proof
-  intros
-  rewrite sym (plusZeroRightNeutral m)
-  trivial
-
-
-LectureOneSol.plus_commutes_step = proof
-  intros
-  rewrite (plusSuccRightSucc m n)
-  rewrite ih
-  trivial
-
-
-LectureOneSol.plus_assoc_step = proof
-  intros
-  rewrite ih
-  trivial
-
-
-LectureOneSol.acc = proof
-  intros
-  rewrite sym (plusZeroRightNeutral n)
-  exact acc
-
-
-LectureOneSol.vrecAcc_rec = proof
-  intros
-  let res = acc ++ (x :: xs)
-  exact res
-
-
