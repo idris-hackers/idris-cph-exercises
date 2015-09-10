@@ -24,3 +24,8 @@ The `Idris Tutorial` [is also available online](http://eb.host.cs.st-andrews.ac.
 The original course materials [can be found here](http://edwinb.wordpress.com/2013/03/15/idris-course-at-itu-slides-and-video/).
 
 [More exciting videos that help with learning about Idris are here](http://www.youtube.com/watch?v=fDWk0BCeblQ&list=PLm7B26QGGEhyQ8KGizhEzb-mqsLSulbj0).
+
+
+## Books
+
+[Type-Driven Development with Idris](https://www.manning.com/books/type-driven-development-with-idris) by Edwin Brady (Manning Publications). [Chapter 1](https://manning-content.s3.amazonaws.com/download/8/99b07b5-ad1d-4272-860b-c323b3f5bf4c/Brady_TDDwithIdris_MEAP_ch1.pdf)
